@@ -1,10 +1,51 @@
+"use client"
+
 import Link from "next/link"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { useState } from "react"
 
 
 export const RightSection = () => {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value){
+            setEmail(e.target.value);
+        } else {
+            setEmail("")
+        }
+    }
+
+    const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value){
+            setPassword(e.target.value);
+        } else {
+            setPassword("")
+        }
+    }
+    const handLerLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        // fetch api
+        await fetch("http://localhost:8080/users/login", 
+            {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        }) .then ((response) => {
+            console.log(response.json());
+        })
+    }
+    console.log("email: ",email, "password: ",password)
+
+
     return (
         <div className="w-1/2 flex flex-col justify-center">
             <Card className="h-full flex flex-col justify-center px-14 gap-16">
@@ -15,13 +56,27 @@ export const RightSection = () => {
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-2">
                             <Label>Email</Label>
-                            <Input type="text" placeholder="exanple@gmail.com" className="py-2 text-lg h-10"/>
+                            <Input 
+                                type="text" 
+                                placeholder="exanple@gmail.com" 
+                                className="py-2 text-lg h-10" 
+                                value={email} 
+                                onChange={changeEmail}
+                            />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label>Password</Label>
-                            <Input type="password" placeholder="Your Password" className="py-2 text-lg h-10"/>
+                            <Input 
+                                type="password" 
+                                placeholder="Your Password" 
+                                className="py-2 text-lg h-10" 
+                                value={password} 
+                                onChange={changePassword}
+                            />
                         </div>
-                        <button className="bg-[#13a4ec] text-white rounded-md font-bold py-3 drop-shadow-lg drop-shadow-gray-200">Login</button>
+                        <button 
+                            onClick={handLerLogin}
+                            className="bg-[#13a4ec] text-white rounded-md font-bold py-3 drop-shadow-lg drop-shadow-gray-200">Login</button>
                     </div>
                     <div>
                         <span>Don't have an account yet?</span>
