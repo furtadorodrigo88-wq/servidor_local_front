@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { useState } from "react"
+import { toast } from "sonner"
 
 
 export const RightSection = () => {
@@ -29,7 +30,7 @@ export const RightSection = () => {
     const handLerLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         // fetch api
-        await fetch("http://localhost:8080/users/login", 
+        const response = await fetch("http://localhost:8080/users/login", 
             {
             method: "POST",
             headers: {
@@ -39,11 +40,20 @@ export const RightSection = () => {
                 email: email,
                 password: password
             })
-        }) .then ((response) => {
-            console.log(response.json());
-        })
+        }) 
+        if (response.status === 200) {
+            toast.success("Usuario logado com sucesso")
+            const ResponseData = await response.json();
+
+            console.log("dados recebidos: ",ResponseData.token)
+
+            if (typeof window !== "undefined") {
+               // window.location.href = "/home"
+            }
+        } else {
+            toast.error("Email ou senha incorretos")
+        }
     }
-    console.log("email: ",email, "password: ",password)
 
 
     return (

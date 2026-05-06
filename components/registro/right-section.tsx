@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import Link from "next/link"
+import { toast } from "sonner"
 
 
 
@@ -84,7 +85,7 @@ export const RightSection = () => {
     const handleRegistro= async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         // fetch api
-        await fetch("http://localhost:8080/users/create", 
+        const response = await fetch("http://localhost:8080/users/create", 
         {
             method: "POST",
             headers: {
@@ -103,9 +104,15 @@ export const RightSection = () => {
                 role: "cliente",
                 enabled: true
             })
-        }) .then ((response) => {
-            console.log(response.json());
         })
+        if (response.status === 200) {
+            toast.success("Usuario cadastrado com sucesso")
+            if (typeof window !== "undefined") {
+                window.location.href = "/login"
+            }
+        } else {
+            toast.error("Não foi possivel cadastrar o usuario, tente novamente")
+        }
     }
     return(
         <div className="w-1/2 flex flex-col justify-center">
@@ -119,7 +126,7 @@ export const RightSection = () => {
                             <Label>Nome Completo</Label>
                             <Input 
                                 type="text" 
-                                placeholder="exanple@gmail.com" 
+                                placeholder="Your full name" 
                                 className="py-2 text-lg h-10" 
                                 value={name} 
                                 onChange={changeName}
@@ -129,7 +136,7 @@ export const RightSection = () => {
                             <Label>Numero do Documento</Label>
                             <Input 
                                 type="text" 
-                                placeholder="exanple@gmail.com" 
+                                placeholder="Your document number" 
                                 className="py-2 text-lg h-10" 
                                 value={number} 
                                 onChange={changeNumber}
@@ -139,7 +146,7 @@ export const RightSection = () => {
                             <Label>Data de Nascimento</Label>
                             <Input 
                                 type="text" 
-                                placeholder="dd/mm/yyyy" 
+                                placeholder="dd-mm-yyyy" 
                                 className="py-2 text-lg h-10" 
                                 value={dataNascimento} 
                                 onChange={changeDataNascimento}
