@@ -6,6 +6,7 @@ import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { useState } from "react"
 import { toast } from "sonner"
+import { setCookie } from "nookies"
 
 
 export const RightSection = () => {
@@ -43,12 +44,21 @@ export const RightSection = () => {
         }) 
         if (response.status === 200) {
             toast.success("Usuario logado com sucesso")
-            const ResponseData = await response.json();
-
-            console.log("dados recebidos: ",ResponseData.token)
+            const ResponseData = await response.json()
+            console.log("dados recebidos: ",ResponseData)
+            
+            //salvar dados no cookies
+            setCookie(null, "token",ResponseData.data.token,{
+                maxAge: 60 * 60 * 24 * 7,
+                path:"/"
+            });
+            setCookie(null, "user",JSON.stringify(ResponseData.data.user),{
+                maxAge: 60 * 60 * 24 * 7,
+                path:"/"
+            });
 
             if (typeof window !== "undefined") {
-               // window.location.href = "/home"
+                window.location.href = "/home"
             }
         } else {
             toast.error("Email ou senha incorretos")
