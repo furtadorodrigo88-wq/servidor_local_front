@@ -1,53 +1,60 @@
-import Image from "next/image"
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
+import Image from "next/image";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import Link from "next/link";
 
-interface CategoryType {
-    id: string,
-    nome: string,
-    icone: string
+interface CategoriaType {
+  id: string;
+  nome: string;
+  icone: string;
 }
 
 interface PedidoCardProps {
-    title: string,
-    description: string,
-    image: string,
-    category: CategoryType
+  id: string;
+  title: string;
+  desciption: string;
+  image: string;
+  category: CategoriaType;
 }
 
 export const PedidoCard = (pedidoCardProps: PedidoCardProps) => {
-    return (
-        <Card className="w-full h-[400px]  m-0 p-0">
-            <CardHeader className="h-[200px] m-0 p-0">
-                <div className="flex flex-col relative h-full">
-                    <div className="w-full flex items-center justify-center relative h-[200px] m-0 p-0">
-                        <Image className="w-full object-cover" src={pedidoCardProps.image} fill alt="" />
-                    </div>
-                    <div className="absolute  left-1/2 top-1/2 w-12 h-12 bg-white rouded-full shadow-md items-center justify-center border border-gray-100 rounded-full">
-                        <Image src={pedidoCardProps.category.icone} width={40} height={40} alt="" />
-                    </div>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <div>
-                    <div className="text-left mb-6 left-1/2">
-                        <h1 className="font-bold text-2xl ">{pedidoCardProps.title}</h1>
-                        <p className="text-muted-foreground text-sm">{pedidoCardProps.description}</p>
-                    </div>
-                </div>
-            </CardContent>
-            <CardFooter className="bg-white rounded-b-md">
-                <div className="w-full flex">
-                    <div className="flex flex-col w-1/2">
-                        <span>STARTING AT</span>
-                        <span>$00.00</span>
-                    </div>
-                    <div className="w-full flex items-center justify-end">
-                        <button className="bg-[#13a4ec] text-white rounded-md font-bold p-3 py-3 drop-shadow-lg drop-shadow-gray-200 w-1/2">Browse Providers</button>
-                    </div>
-                </div>
-            </CardFooter>
-        </Card>
+  return (
+    <Card className="h-[400px] w-full">
+      <CardHeader>
+        <div className="w-full h-[200px] relative">
+          <Image
+            src={pedidoCardProps.image}
+            alt={pedidoCardProps.title}
+            fill
+            className="object-cover"
+          />
 
+          <div className="absolute top-1/2 left-1/2 bg-secondary/80 text-secondary-foreground px-2 py-1 rounded-full text-sm">
+            <Image
+              src={pedidoCardProps.category.icone}
+              alt={pedidoCardProps.category.nome}
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div>
+          <h1>{pedidoCardProps.title}</h1>
+          <p>{pedidoCardProps.desciption}</p>
+        </div>
 
-    )
-}
+        <div className="flex w-full items-center justify-between">
+          <div>
+            <span>Average Price:</span>
+            <span>$100</span>
+          </div>
+
+          <Link href={`/pedido/${pedidoCardProps.id}`} className=" ">
+            Explore
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};

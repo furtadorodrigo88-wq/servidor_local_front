@@ -1,7 +1,8 @@
-import { Header } from "@/components/core/header"
 import ProposalReview  from "@/components/dashboard/request"
-
+import UpcomingScheduleCard from "@/components/dashboard/upcoming-schedule-card"
+import { parseCookies } from "nookies"
 export default function Dashboard() {
+
     return (
         <div className="bg-gray-200 h-screen flex">
             <div className="w-1/4 bg-white border-r border-gray-300 shadow-sm">Sidbar</div>
@@ -17,7 +18,6 @@ export default function Dashboard() {
                                 id="1"
                                 title="Testing"
                                 description="Testing"
-                                image="Testing"
                                 user={{
                                     id: "1",
                                     nome: "Testing"
@@ -27,7 +27,6 @@ export default function Dashboard() {
                                     nome: "Testing",
                                     icone: "Testing"
                                 }}
-                                status="Testing"
                                 proposal={{
                                     id: "1",
                                     hours: 1,
@@ -39,7 +38,7 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-1/3 bg-white">Teste</div>
+                    <div className="w-1/3"><UpcomingScheduleCard /></div>
                 </div>
             </div>
         </div>

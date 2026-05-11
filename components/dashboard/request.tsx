@@ -1,12 +1,11 @@
 "use client"
-import { useState } from "react";
-import { Wrench, ArrowRight, Clock, DollarSign, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Clock, DollarSign, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { parseCookies } from "nookies";
 
 interface RequestProps {
   id: string;
@@ -32,14 +31,63 @@ interface CategoryType {
   nome: string;
   icone: string;
 }
+interface ProposalDBType {
+  id: string;
+  id_prestacao_servico: string;
+  preco_hora: number;
+  horas_estimadas: number;
+  estado: string;
+  enabled: boolean;
+}
+//feth api /proposal/get-by-user-id/{idUser}
+export const getProposal = async (idUser: string, token: string): Promise<ProposalType[]> => {
+  const response = await fetch(`http://localhost:8080/proposal/get-by-user-id/${idUser}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+  if (response.status === 200){
+    const data = await response.json()
+    return data
+  }
+  return []
+}
+
 
 export default function ProposalReview(request: RequestProps) {
   const [isReviewing, setIsReviewing] = useState(false);
+  const [proposals, setProposals] = useState<ProposalType[]>([]);
   const hours = request.proposal.hours
   const rate = request.proposal.rate;
   const urgency = request.proposal.urgency;
   const taxa = parseFloat(request.taxa);
-  const [proposal, setProposal] = useState<ProposalType>(request.proposal);
+
+  useEffect(() => {
+    const { token, user } = parseCookies();
+    if (!token || !user) {
+      setProposals([]);
+      return;
+    }
+
+    let parsedUser: { id?: string } = {};
+    try {
+      parsedUser = JSON.parse(user);
+    } catch {
+      setProposals([]);
+      return;
+    }
+
+    if (!parsedUser.id) {
+      setProposals([]);
+      return;
+    }
+
+    void getProposal(parsedUser.id, token).then(setProposals);
+  }, []);
+
 
   // Cálculo do Total
   const total = (parseFloat(hours.toString()) || 0) * (parseFloat(rate.toString()) || 0);
@@ -56,8 +104,9 @@ export default function ProposalReview(request: RequestProps) {
           View All <ArrowRight className="ml-1 h-4 w-4 whitespace-nowrap" />
         </Link>
       </div>
-
-      <Card className={`overflow-hidden transition-all duration-300 ${isReviewing ? 'ring-1 ring-blue-400 border-blue-200' : 'border-slate-200'}`}>
+      {/**map proposal data */} 
+      {proposals.map((item: ProposalType) => (
+      <Card key={item.id} className={`overflow-hidden transition-all duration-300 ${isReviewing ? 'ring-1 ring-blue-400 border-blue-200' : 'border-slate-200'}`}>
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -93,7 +142,7 @@ export default function ProposalReview(request: RequestProps) {
             <div className="mt-8 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold uppercase text-xs tracking-wider">
                 <User className="h-4 w-4 text-slate-400" />
-                Proposal Editor
+                Proposal Details
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
@@ -102,7 +151,7 @@ export default function ProposalReview(request: RequestProps) {
                   <label className="text-[10px] font-bold uppercase text-slate-500 flex items-center gap-1">
                     <Clock className="h-3 w-3" /> Est. Hours
                   </label>
-                  <div className="bg-slate-50 border-slate-200 focus-visible:ring-blue-400 font-semibold rounded-full">
+                  <div className="bg-slate-50 border-slate-200 focus-visible:ring-blue-400 font-semibold rounded-full text-center">
                     {request.proposal.hours}
                   </div>
                 </div>
@@ -112,7 +161,7 @@ export default function ProposalReview(request: RequestProps) {
                   <label className="text-[10px] font-bold uppercase text-slate-500 flex items-center gap-1">
                     <DollarSign className="h-3 w-3" /> Rate ($/hr)
                   </label>
-                  <div className="bg-slate-50 border-slate-200 focus-visible:ring-blue-400 font-semibold rounded-full">
+                  <div className="bg-slate-50 border-slate-200 focus-visible:ring-blue-400 font-semibold rounded-full text-center">
                     {request.proposal.rate}
                   </div>
                 </div>
@@ -137,35 +186,11 @@ export default function ProposalReview(request: RequestProps) {
                   </p>
                 </div>
               </div>
-
-              {/* Ações Finais */}
-              <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-50">
-                <Button
-                  variant="ghost"
-                  onClick={() => setIsReviewing(false)}
-                  className="text-slate-500 font-bold"
-                >
-                  Save Draft
-                </Button>
-                <Button
-                  onClick={() => {
-                    setProposal({
-                      id: proposal.id,
-                      hours: hours,
-                      rate: rate,
-                      urgency: urgency
-                    });
-                    setIsReviewing(false)
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 rounded-xl shadow-md shadow-blue-200"
-                >
-                  <ArrowRight className="mr-2 h-4 w-4" /> Send Proposal
-                </Button>
-              </div>
             </div>
           )}
         </CardContent>
       </Card>
+      ))}
     </div>
   );
 }

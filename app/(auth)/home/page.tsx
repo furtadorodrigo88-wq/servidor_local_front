@@ -1,26 +1,28 @@
 import { PedidoCard } from "@/components/core/pedido-card"
 import { Header } from "@/components/core/header"
+import { getAllPrestacoesServicos } from "@/app/data/queries/prestacao-servico";
 
 
 export default function Home() {
+    const { loading, error, data } = getAllPrestacoesServicos();
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
     return (
         <div className="bg-gray-200">
             <Header />
             <h1>Home</h1>
             <div className="w-full grid grid-cols-3 gap-6">
-                <PedidoCard
-                    title="instalar porta de entrada"
-                    description="Preciso instalar uma porta de entrada na minha casa, tamanho 2,10m x 80cm."
-                    image="/placeholder.png"
-                    category={
-                        {
-                            id: "1",
-                            nome: "Construção",
-                            icone: "/icone-placeholder.png"
-                        }
-                    }
-
-                />
+                {data?.map((prestacaoServico) => (
+                    <PedidoCard
+                        key={prestacaoServico.id}
+                        id={prestacaoServico.id}
+                        title={prestacaoServico.designacao}
+                        desciption={prestacaoServico.designacao}
+                        image="/placeholder.jpeg"
+                        category={prestacaoServico.servico.categoria}
+                    />
+                ))}
             </div>
         </div>
     )
