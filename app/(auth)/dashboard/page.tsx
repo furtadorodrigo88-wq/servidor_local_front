@@ -1,6 +1,5 @@
 import ProposalReview  from "@/components/dashboard/request"
 import UpcomingScheduleCard from "@/components/dashboard/upcoming-schedule-card"
-import { parseCookies } from "nookies"
 export default function Dashboard() {
 
     return (
@@ -14,27 +13,7 @@ export default function Dashboard() {
                         <div className="flex flex-col  justify-between">
                             <div>Rates & Fees</div>
                             <div className="mt-5">
-                                <ProposalReview
-                                id="1"
-                                title="Testing"
-                                description="Testing"
-                                user={{
-                                    id: "1",
-                                    nome: "Testing"
-                                }}
-                                category={{
-                                    id: "1",
-                                    nome: "Testing",
-                                    icone: "Testing"
-                                }}
-                                proposal={{
-                                    id: "1",
-                                    hours: 1,
-                                    rate: 1,
-                                    urgency: true
-                                }}
-                                taxa="1"
-                                />
+                                <ProposalReview />
                             </div>
                         </div>
                     </div>
