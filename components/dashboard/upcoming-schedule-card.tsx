@@ -17,7 +17,7 @@ export default function UpcomingScheduleCard() {
 
       <div className="mt-6">
         <p className="mb-4 font-medium text-gray-700">
-          Today, Oct 7
+          {date?.toDateString()}
         </p>
 
         <div className="space-y-3">

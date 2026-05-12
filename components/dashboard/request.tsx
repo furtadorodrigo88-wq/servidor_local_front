@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { parseCookies } from "nookies";
+import { Badge } from "../ui/badge";
 
 interface RequestProps {
   title?: string;
@@ -78,7 +79,7 @@ export default function ProposalReview({ title }: RequestProps) {
     <div className="max-w-full mx-auto p-8 bg-white border border-gray-200 rounded-3xl shadow-sm font-sans">
       <div className="flex justify-between mb-6 ">
         <h2 className="text-2xl font-bold tracking-tight text-slate-900">Active Proposals</h2>
-        <Link className="text-blue-600 font-semibold hover:underline whitespace-nowrap items-center" href="">
+        <Link className="text-sky-500  hover:text-sky-600 whitespace-nowrap items-center" href="">
           View All <ArrowRight className="ml-1 h-4 w-4 whitespace-nowrap" />
         </Link>
       </div>
@@ -116,6 +117,9 @@ export default function ProposalReview({ title }: RequestProps) {
                     </p>
                   </div>
                 </div>
+                <Badge variant="default" className={item.estado === "aceite" ? "bg-green-500" : item.estado === "rejeitada" ? "bg-red-500" : item.estado === "pendente" ? "bg-yellow-500" : "bg-blue-500"}>
+                    {item.estado}
+                </Badge>
                 {isReviewing ? (
                   <Button
                     onClick={() => setIsReviewing(false)}

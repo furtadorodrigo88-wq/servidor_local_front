@@ -1,3 +1,4 @@
+"use client";
 import { PedidoCard } from "@/components/core/pedido-card"
 import { Header } from "@/components/core/header"
 import { getAllPrestacoesServicos } from "@/app/data/queries/prestacao-servico";
