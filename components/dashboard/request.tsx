@@ -173,7 +173,7 @@ export default function ProposalReview({ title }: RequestProps) {
                         className="border-slate-300 data-[state=checked]:bg-blue-600"
                       />
                       <label htmlFor={`urgency-${item.id}`} className="text-xs font-medium text-slate-600 leading-tight">
-                        Urgency Fee ({taxaUrgencia}%) <br />
+                        Urgency Fee ({taxaUrgencia || 15}%) <br />
                         <span className="text-blue-600 font-bold">{urgency ? "Applied" : "Not applied"}</span>
                       </label>
                     </div>

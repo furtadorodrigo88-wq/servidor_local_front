@@ -1,0 +1,10 @@
+geison = appointment-item.tsx
+         mini-calendar.tsx
+         upcoming-schedule-card.tsx
+
+Wilson = request.tsx
+
+jaquelina = rates-card.tsx
+            stat-card.tsx
+
+david = side-bar.tsx // mas nao fez eu wilson que criar um novo sidebar para completar a pagina de dashboard

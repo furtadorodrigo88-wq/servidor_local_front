@@ -14,7 +14,7 @@ export const RightSection = () => {
     const [password, setPassword] = useState("")
 
     const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value){
+        if (e.target.value) {
             setEmail(e.target.value);
         } else {
             setEmail("")
@@ -22,7 +22,7 @@ export const RightSection = () => {
     }
 
     const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value){
+        if (e.target.value) {
             setPassword(e.target.value);
         } else {
             setPassword("")
@@ -31,30 +31,30 @@ export const RightSection = () => {
     const handLerLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         // fetch api
-        const response = await fetch("http://localhost:8080/users/login", 
+        const response = await fetch("http://localhost:8080/users/login",
             {
-            method: "POST",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             })
-        }) 
         if (response.status === 200) {
             toast.success("Usuario logado com sucesso")
             const ResponseData = await response.json()
-            console.log("dados recebidos: ",ResponseData)
-            
+                ("dados recebidos: ", ResponseData)
+
             //salvar dados no cookies
-            setCookie(null, "token",ResponseData.data.token,{
+            setCookie(null, "token", ResponseData.data.token, {
                 maxAge: 60 * 60 * 24 * 7,
-                path:"/"
+                path: "/"
             });
-            setCookie(null, "user",JSON.stringify(ResponseData.data.user),{
+            setCookie(null, "user", JSON.stringify(ResponseData.data.user), {
                 maxAge: 60 * 60 * 24 * 7,
-                path:"/"
+                path: "/"
             });
 
             if (typeof window !== "undefined") {
@@ -76,25 +76,25 @@ export const RightSection = () => {
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-2">
                             <Label>Email</Label>
-                            <Input 
-                                type="text" 
-                                placeholder="exanple@gmail.com" 
-                                className="py-2 text-lg h-10" 
-                                value={email} 
+                            <Input
+                                type="text"
+                                placeholder="exanple@gmail.com"
+                                className="py-2 text-lg h-10"
+                                value={email}
                                 onChange={changeEmail}
                             />
                         </div>
                         <div className="flex flex-col gap-2">
                             <Label>Password</Label>
-                            <Input 
-                                type="password" 
-                                placeholder="Your Password" 
-                                className="py-2 text-lg h-10" 
-                                value={password} 
+                            <Input
+                                type="password"
+                                placeholder="Your Password"
+                                className="py-2 text-lg h-10"
+                                value={password}
                                 onChange={changePassword}
                             />
                         </div>
-                        <button 
+                        <button
                             onClick={handLerLogin}
                             className="bg-[#13a4ec] text-white rounded-md font-bold py-3 drop-shadow-lg drop-shadow-gray-200">Login</button>
                     </div>
