@@ -42,9 +42,8 @@ export const RightSection = () => {
                     password: password
                 })
             })
-        if (response.status === 200) {
             toast.success("Usuario logado com sucesso")
-            const ResponseData = await response.json()
+            const ResponseData: any = await response.json()
                 ("dados recebidos: ", ResponseData)
 
             //salvar dados no cookies

@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Link from "next/link";

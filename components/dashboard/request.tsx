@@ -1,79 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, Clock, DollarSign, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { parseCookies } from "nookies";
 import { Badge } from "../ui/badge";
+import { useDashboardData } from "./dashboard-data-provider";
+import type { ProposalType } from "./dashboard-data-provider";
 
 interface RequestProps {
   title?: string;
 }
 
-interface ProposalType {
-  id: string;
-  id_prestacao_servico: string;
-  preco_hora: string;
-  horas_estimadas: string;
-  estado: string;
-  enabled: boolean;
-  id_prestador: string;
-  urgente: boolean;
-  taxa_urgencia: number;
-}
-
-interface ProposalApiResponse {
-  status: "success" | "error";
-  message: string;
-  data: ProposalType[] | null;
-}
-
-export const getProposal = async (idUser: string, token: string): Promise<ProposalType[]> => {
-  const response = await fetch(`http://localhost:8080/proposal/get-by-user-id/${idUser}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (response.ok) {
-    const payload: ProposalApiResponse = await response.json();
-    return payload.data ?? [];
-  }
-
-  return [];
-};
-
 export default function ProposalReview({ title }: RequestProps) {
   const [isReviewing, setIsReviewing] = useState(false);
-  const [proposals, setProposals] = useState<ProposalType[]>([]);
-
-  useEffect(() => {
-    const { token, user } = parseCookies();
-    if (!token || !user) {
-      setProposals([]);
-      return;
-    }
-
-    let parsedUser: { id?: string } = {};
-    try {
-      parsedUser = JSON.parse(user);
-    } catch {
-      setProposals([]);
-      return;
-    }
-
-    if (!parsedUser.id) {
-      setProposals([]);
-      return;
-    }
-
-    void getProposal(parsedUser.id, token).then(setProposals);
-  }, []);
+  const { proposals } = useDashboardData();
 
   return (
     <div className="max-w-full mx-auto p-8 bg-white border border-gray-200 rounded-3xl shadow-sm font-sans">

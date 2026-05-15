@@ -1,10 +1,13 @@
+"use client"
 import RatesCard from "@/components/dashboard/rates-card"
 import ProposalReview  from "@/components/dashboard/request"
 import Sidebar from "@/components/dashboard/sidebar"
 import UpcomingScheduleCard from "@/components/dashboard/upcoming-schedule-card"
+import { DashboardDataProvider } from "@/components/dashboard/dashboard-data-provider"
 export default function Dashboard() {
 
     return (
+        <DashboardDataProvider>
         <div className="bg-gray-200 h-screen flex w-full">
             <div>
                 <Sidebar />
@@ -29,5 +32,6 @@ export default function Dashboard() {
                 </div>
             </div>
         </div>
+        </DashboardDataProvider>
     )
 }
