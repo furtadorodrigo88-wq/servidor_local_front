@@ -8,6 +8,19 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { setCookie } from "nookies"
 
+interface ResponseType {
+    status: string;
+    message: string;
+    data: {
+        token: string;
+        user: {
+            id: string;
+            nome: string;
+            email: string;
+        };
+    };
+}
+
 
 export const RightSection = () => {
     const [email, setEmail] = useState("")
@@ -31,7 +44,7 @@ export const RightSection = () => {
     const handLerLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         // fetch api
-        const response = await fetch("http://localhost:8080/users/login",
+        const response: any = await fetch("http://localhost:8080/users/login",
             {
                 method: "POST",
                 headers: {
@@ -42,9 +55,10 @@ export const RightSection = () => {
                     password: password
                 })
             })
+        if (response.status === 200) {
             toast.success("Usuario logado com sucesso")
-            const ResponseData: any = await response.json()
-                ("dados recebidos: ", ResponseData)
+            const ResponseData: ResponseType = await response.json()
+            console.log("dados recebidos: ", ResponseData)
 
             //salvar dados no cookies
             setCookie(null, "token", ResponseData.data.token, {
