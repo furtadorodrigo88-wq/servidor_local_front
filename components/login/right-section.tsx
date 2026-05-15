@@ -58,7 +58,6 @@ export const RightSection = () => {
         if (response.status === 200) {
             toast.success("Usuario logado com sucesso")
             const ResponseData: ResponseType = await response.json()
-            console.log("dados recebidos: ", ResponseData)
 
             //salvar dados no cookies
             setCookie(null, "token", ResponseData.data.token, {
