@@ -1,20 +1,14 @@
-# especifica verção de sistema operacional
 FROM node:20-alpine
 
-#defini a pasta onde o codigo vai ser executado
 WORKDIR /app
 
-#copia os arquivos package.json e package-lock.json para a pasta /app
-COPY package*.json ./
+RUN corepack enable
+dfsf
+COPY package.json ./
+RUN pnpm install
 
-#instalar dependencias
-RUN npm install
-
-#copia todo codigo-fonte para o diretorio /app
 COPY . .
 
-#imforma a porta que o container vai usar
 EXPOSE 3000
 
-#comando de execuçao em desemvolvimento
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]
